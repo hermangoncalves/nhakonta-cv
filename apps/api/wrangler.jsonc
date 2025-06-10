@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "api",
+  "name": "nhakonta-api",
   "main": "src/index.ts",
   "compatibility_date": "2025-06-10"
   // "compatibility_flags": [
