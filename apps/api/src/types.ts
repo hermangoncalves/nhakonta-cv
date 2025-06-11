@@ -1,0 +1,19 @@
+import { OpenAPIHono, RouteConfig, RouteHandler } from "@hono/zod-openapi";
+import { PinoLogger } from "hono-pino";
+
+export interface Env {
+    DB: D1Database;
+    NODE_ENV: string;
+    ALLOWED_ORIGINS: string
+}
+
+export interface AppBindings {
+    Bindings: Env,
+    Variables: {
+        logger: PinoLogger;
+    }
+}
+
+export type AppOpenAPIHono = OpenAPIHono<AppBindings>
+
+export type AppRouteHandler<R extends RouteConfig> = RouteHandler<R, AppBindings> 
