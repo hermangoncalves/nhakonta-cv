@@ -7,6 +7,7 @@ export interface Env {
     ALLOWED_ORIGINS: string;
     CLERK_WEBHOOK_SECRET: string;
     CLERK_SECRET_KEY: string;
+    ENCRYPTION_KEY: string;
 }
 
 export interface AppBindings {
