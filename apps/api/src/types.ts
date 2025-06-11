@@ -4,13 +4,18 @@ import { PinoLogger } from "hono-pino";
 export interface Env {
     DB: D1Database;
     NODE_ENV: string;
-    ALLOWED_ORIGINS: string
+    ALLOWED_ORIGINS: string;
+    CLERK_WEBHOOK_SECRET: string;
+    CLERK_SECRET_KEY: string;
 }
 
 export interface AppBindings {
     Bindings: Env,
     Variables: {
         logger: PinoLogger;
+        user: {
+            clerkId: string;
+        };
     }
 }
 

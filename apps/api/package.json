@@ -7,6 +7,7 @@
     "cf-typegen": "wrangler types --env-interface CloudflareBindings"
   },
   "dependencies": {
+    "@clerk/clerk-sdk-node": "^5.1.6",
     "@hono/zod-openapi": "^0.19.8",
     "@libsql/client": "^0.15.9",
     "@scalar/hono-api-reference": "^0.9.3",
