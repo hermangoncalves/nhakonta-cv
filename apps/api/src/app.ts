@@ -3,10 +3,12 @@ import { pinoLogger } from 'hono-pino'
 import { pinoLoggerOptions } from '@/utils/logger'
 import pkgJson from '../package.json';
 import { Scalar } from '@scalar/hono-api-reference'
+import defaultHook from '@/hooks/default-hook';
 
 export function createRouter() {
     const router = new OpenAPIHono({
-        strict: false
+        strict: false,
+        defaultHook,
     })
 
     return router
