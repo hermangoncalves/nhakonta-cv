@@ -4,6 +4,8 @@ import { pinoLoggerOptions } from '@/utils/logger'
 import pkgJson from '../package.json';
 import { Scalar } from '@scalar/hono-api-reference'
 import defaultHook from '@/hooks/default-hook';
+import onError from '@/middlewares/on-error';
+import notFound from '@/middlewares/not-found';
 
 export function createRouter() {
     const router = new OpenAPIHono({
@@ -37,6 +39,9 @@ export default function createApp() {
         theme: 'kepler',
         layout: 'modern'
     }))
+
+    app.onError(onError);
+    app.notFound(notFound);
 
     return app
 }
