@@ -1,5 +1,6 @@
 {
   "name": "api",
+  "version": "1.0.0",
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
@@ -7,6 +8,7 @@
   },
   "dependencies": {
     "@hono/zod-openapi": "^0.19.8",
+    "@scalar/hono-api-reference": "^0.9.3",
     "hono": "^4.7.11",
     "hono-pino": "^0.8.0"
   },
