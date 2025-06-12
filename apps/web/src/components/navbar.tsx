@@ -3,6 +3,7 @@ import { routes } from "@/router";
 import { Button } from "./ui/button";
 import { User } from "lucide-react";
 import { ModeToggle } from "./mode-toggle";
+import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/clerk-react";
 
 export const Navbar = () => {
   return (
@@ -17,9 +18,16 @@ export const Navbar = () => {
         </Link>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline">
-            <User /> Login
-          </Button>
+          <SignedOut>
+          <SignInButton mode="modal">
+            <Button variant="outline">
+              <User /> Login
+            </Button>
+          </SignInButton>
+          </SignedOut>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
           <ModeToggle />
         </div>
       </div>

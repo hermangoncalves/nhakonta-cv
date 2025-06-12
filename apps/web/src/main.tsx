@@ -1,10 +1,20 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { ClerkProvider } from "@clerk/clerk-react";
+import "./index.css";
+import App from "./App.tsx";
+import { env } from "./lib/env.ts";
+import { routes } from "./router.tsx";
 
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
-  </StrictMode>,
-)
+    <ClerkProvider
+      publishableKey={env.CLERK_PUBLISHABLE_KEY}
+      afterSignOutUrl={routes.home}
+      signUpFallbackRedirectUrl={routes.home}
+      signInFallbackRedirectUrl={routes.home}
+    >
+      <App />
+    </ClerkProvider>
+  </StrictMode>
+);

@@ -1,6 +1,8 @@
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { routes } from "@/router";
+import { SignInButton, useAuth } from "@clerk/clerk-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const lastUsers = {
@@ -30,6 +32,8 @@ const lastUsers = {
 };
 
 export function Hero() {
+  const { isSignedIn } = useAuth();
+
   return (
     <section className="mt-14">
       <div className="container text-center">
@@ -42,9 +46,18 @@ export function Hero() {
             lugar. Compartilhe com segurança, quando e como quiser.
           </p>
         </div>
-        <Button asChild size="lg" className="mt-10">
-          <Link to={routes.home}>Começar agora</Link>
-        </Button>
+        {isSignedIn ? (
+          <Button size="lg" className="mt-10">
+            <Link to={routes.home}>Dashboard</Link>
+            <ArrowRight className="ml-2 h-5 w-5" />
+          </Button>
+        ) : (
+          <SignInButton mode="modal">
+            <Button size="lg" className="mt-10">
+              Começar agora
+            </Button>
+          </SignInButton>
+        )}
         <div className="mx-auto mt-10 flex w-fit flex-col items-center gap-4 sm:flex-row">
           <span className="mx-4 inline-flex items-center -space-x-4">
             {lastUsers.avatars.map((avatar, index) => (
