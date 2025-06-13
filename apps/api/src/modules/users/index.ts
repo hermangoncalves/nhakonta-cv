@@ -5,5 +5,6 @@ import { createRouter } from '@/app';
 
 const usersRoutes = createRouter()
     .openapi(routes.createUser, handlers.createUser)
+    .openapi(routes.listLatestUsersAvatars, handlers.listLatestUsersAvatars)
 
 export default usersRoutes;

@@ -4,9 +4,11 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy --minify",
-    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
+    "@nhakonta/shared": "workspace:*",
     "@clerk/clerk-sdk-node": "^5.1.6",
     "@hono/zod-openapi": "^0.19.8",
     "@libsql/client": "^0.15.9",

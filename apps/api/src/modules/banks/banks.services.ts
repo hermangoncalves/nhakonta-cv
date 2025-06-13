@@ -1,0 +1,58 @@
+import getDB from "@/db";
+import { BankInsertModel, banks } from "@/db/schemas";
+import { AppBindings } from "@/types";
+import { Context } from "hono";
+import { and, eq } from "drizzle-orm";
+
+async function createBank(c: Context<AppBindings>, values: BankInsertModel) {
+    const db = getDB(c)
+
+    return await db.insert(banks).values(values).returning({
+        id: banks.id
+    });
+}
+
+async function listBanks(c: Context<AppBindings>, userId: number, clerkId: string, limit: number = 10, offset: number = 0) {
+    const db = getDB(c)
+
+    return await db.query.banks.findMany({
+        where: and(
+            eq(banks.userId, userId),
+            eq(banks.clerkId, clerkId)
+        ),
+        limit,
+        offset
+    });
+}
+
+// async function updateBank(c: Context<AppBindings>, id: number, clerkId: string, values: Partial<BankInsertModel>) {
+//     const db = getDB(c)
+
+//     return await db.update(banks)
+//         .set({
+//             ...values,
+//         })
+//         .where((banks, { and, eq }) => and(
+//             eq(banks.id, id),
+//             eq(banks.clerkId, clerkId)
+//         ))
+//         .returning();
+// }
+
+// async function deleteBank(c: Context<AppBindings>, id: number, clerkId: string) {
+//     const db = getDB(c)
+
+//     return await db.delete(banks)
+//         .where((banks, { and, eq }) => and(
+//             eq(banks.id, id),
+//             eq(banks.clerkId, clerkId)
+//         ))
+//         .returning();
+// }
+
+export const bankServices = {
+    createBank,
+    listBanks,
+    // updateBank,
+    // deleteBank,
+}

@@ -1,5 +1,6 @@
 import { OpenAPIHono } from '@hono/zod-openapi'
 import { pinoLogger } from 'hono-pino'
+import { cors } from 'hono/cors';
 import { pinoLoggerOptions } from '@/utils/logger'
 import pkgJson from '../package.json';
 import { Scalar } from '@scalar/hono-api-reference'
@@ -25,6 +26,21 @@ export default function createApp() {
             reqId: () => crypto.randomUUID(),
         },
     }))
+
+    app.use('*', async (ctx, next) => {
+        const allowedOrigins = ctx.env.ALLOWED_ORIGINS
+
+        const corsMiddleware = cors(
+            {
+                origin: allowedOrigins,
+                allowHeaders: ['Content-Type', 'Authorization'],
+                allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+                credentials: true,
+            }
+        )
+
+        return corsMiddleware(ctx, next)
+    })
 
     app.doc('/docs', {
         openapi: '3.0.0',

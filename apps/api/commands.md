@@ -1,0 +1,1 @@
+pnpm wrangler d1 execute nhakonta-database --local --file=./src/db/migrations/0000_married_marrow.sql

@@ -2,12 +2,18 @@ import authMiddleware from "@/middlewares/auth";
 import { jsonSchema, jsonContentRequired } from "@/utils/json-schema";
 import { createRoute, z } from "@hono/zod-openapi";
 import * as HttpStatusCode from '@/utils/http-status-codes';
-import { createUserSchema, listUsersSchema, updateUserSchema, userSchema } from "./users.schemas";
+import {
+    userSchema,
+    createUserSchema,
+    listUsersSchema,
+    updateUserSchema,
+    listUsersAvatarsSchema,
+} from '@nhakonta/shared';
 
 export const createUser = createRoute({
     tags: ['users'],
     method: 'post',
-    path: '/v1/users',
+    path: '/api/v1/users',
     middleware: [
         authMiddleware,
     ],
@@ -47,6 +53,17 @@ export const listUsers = createRoute({
         }), 'User not found'),
     },
 });
+
+export const listLatestUsersAvatars = createRoute({
+    tags: ['users'],
+    method: 'get',
+    path: '/api/v1/users/latest',
+    responses: {
+        [HttpStatusCode.OK]: jsonSchema(listUsersAvatarsSchema, 'List of users avatars'),
+    },
+});
+
+export type LastesUsersAvatarRoute = typeof listLatestUsersAvatars
 
 export const getUser = createRoute({
     tags: ['users'],

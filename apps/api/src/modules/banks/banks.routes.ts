@@ -2,12 +2,17 @@ import authMiddleware from "@/middlewares/auth";
 import { jsonSchema, jsonContentRequired } from "@/utils/json-schema";
 import { createRoute, z } from "@hono/zod-openapi";
 import * as HttpStatusCode from '@/utils/http-status-codes';
-import { bankAccountSchema, createBankAccountSchema, updateBankAccountSchema, listBankAccountsSchema } from "./banks.schemas";
+import {
+    bankAccountSchema,
+    createBankAccountSchema,
+    listBankAccountsSchema,
+    updateBankAccountSchema,
+} from '@nhakonta/shared';
 
 export const createBank = createRoute({
-    tags: ['bank'],
+    tags: ['banks'],
     method: 'post',
-    path: '/api/banks',
+    path: '/api/v1/banks',
     middleware: [
         authMiddleware,
     ],
@@ -16,21 +21,21 @@ export const createBank = createRoute({
     },
     responses: {
         [HttpStatusCode.CREATED]: jsonSchema(z.object({
-            id: z.number().describe('Bank account ID'),
+            id: z.number(),
         }), 'Bank account created'),
         [HttpStatusCode.UNAUTHORIZED]: jsonSchema(z.object({
-            error: z.string().describe('User not found'),
+            error: z.string(),
         }), 'User not found'),
         [HttpStatusCode.INTERNAL_SERVER_ERROR]: jsonSchema(z.object({
-            error: z.string().describe('Failed to create bank account'),
+            error: z.string(),
         }), 'Failed to create bank account'),
     },
 });
 
 export const listBanks = createRoute({
-    tags: ['bank'],
+    tags: ['banks'],
     method: 'get',
-    path: '/api/banks',
+    path: '/api/v1/banks',
     middleware: [
         authMiddleware,
     ],
@@ -43,15 +48,15 @@ export const listBanks = createRoute({
     responses: {
         [HttpStatusCode.OK]: jsonSchema(listBankAccountsSchema, 'List of bank accounts'),
         [HttpStatusCode.UNAUTHORIZED]: jsonSchema(z.object({
-            error: z.string().describe('User not found'),
+            error: z.string(),
         }), 'User not found'),
     },
 });
 
 export const getBank = createRoute({
-    tags: ['bank'],
+    tags: ['banks'],
     method: 'get',
-    path: '/api/banks/{id}',
+    path: '/api/v1/banks/{id}',
     middleware: [
         authMiddleware,
     ],
@@ -63,18 +68,18 @@ export const getBank = createRoute({
     responses: {
         [HttpStatusCode.OK]: jsonSchema(bankAccountSchema, 'Bank account details'),
         [HttpStatusCode.NOT_FOUND]: jsonSchema(z.object({
-            error: z.string().describe('Bank account not found'),
+            error: z.string(),
         }), 'Bank account not found'),
         [HttpStatusCode.UNAUTHORIZED]: jsonSchema(z.object({
-            error: z.string().describe('User not found'),
+            error: z.string(),
         }), 'User not found'),
     },
 });
 
 export const updateBank = createRoute({
-    tags: ['bank'],
+    tags: ['banks'],
     method: 'put',
-    path: '/api/banks/{id}',
+    path: '/api/v1/banks/{id}',
     middleware: [
         authMiddleware,
     ],
@@ -85,20 +90,20 @@ export const updateBank = createRoute({
         body: jsonContentRequired(updateBankAccountSchema, 'Updated bank account details'),
     },
     responses: {
-        [HttpStatusCode.OK]: jsonSchema(createBankAccountSchema, 'Updated bank account'),
+        [HttpStatusCode.OK]: jsonSchema(bankAccountSchema, 'Updated bank account'),
         [HttpStatusCode.NOT_FOUND]: jsonSchema(z.object({
-            error: z.string().describe('Bank account not found'),
+            error: z.string(),
         }), 'Bank account not found'),
         [HttpStatusCode.UNAUTHORIZED]: jsonSchema(z.object({
-            error: z.string().describe('User not found'),
+            error: z.string(),
         }), 'User not found'),
     },
 });
 
 export const deleteBank = createRoute({
-    tags: ['bank'],
+    tags: ['banks'],
     method: 'delete',
-    path: '/api/banks/{id}',
+    path: '/api/v1/banks/{id}',
     middleware: [
         authMiddleware,
     ],
@@ -110,10 +115,10 @@ export const deleteBank = createRoute({
     responses: {
         [HttpStatusCode.NO_CONTENT]: jsonSchema(z.null(), 'Bank account deleted'),
         [HttpStatusCode.NOT_FOUND]: jsonSchema(z.object({
-            error: z.string().describe('Bank account not found'),
+            error: z.string(),
         }), 'Bank account not found'),
         [HttpStatusCode.UNAUTHORIZED]: jsonSchema(z.object({
-            error: z.string().describe('User not found'),
+            error: z.string(),
         }), 'User not found'),
     },
 });

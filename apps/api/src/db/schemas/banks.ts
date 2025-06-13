@@ -3,7 +3,7 @@ import { timestamps } from "./timestamps";
 import { InferInsertModel, relations } from "drizzle-orm";
 import { users } from "./users";
 
-export const bankAccounts = sqliteTable('bank_accounts', {
+export const banks = sqliteTable('bank_accounts', {
     id: integer('id').primaryKey({ autoIncrement: true }),
     userId: integer('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
     clerkId: text('clerk_id').notNull().references(() => users.clerkId, { onDelete: 'cascade' }),
@@ -14,12 +14,12 @@ export const bankAccounts = sqliteTable('bank_accounts', {
     ...timestamps,
 })
 
-export const bankAccountsRelations = relations(bankAccounts, ({ one, many }) => ({
+export const banksRelations = relations(banks, ({ one, many }) => ({
     user: one(users, {
-        fields: [bankAccounts.userId],
+        fields: [banks.userId],
         references: [users.id],
     }),
 }));
 
 
-export type BankAccountInsertModel = InferInsertModel<typeof bankAccounts>
+export type BankInsertModel = InferInsertModel<typeof banks>
