@@ -69,7 +69,7 @@ const faqItems: FaqItem[] = [
 
 export default function Faq() {
   return (
-    <section className="mt-8 mb-10">
+    <section className="mt-20 mb-10 px-4">
       <div className="container space-y-16">
         <div className="mx-auto flex max-w-3xl flex-col text-left md:text-center">
           <h2 className="text-3xl font-semibold md:mb-4 lg:mb-6 lg:text-4xl">
@@ -84,12 +84,12 @@ export default function Faq() {
           {faqItems.map((item) => (
             <AccordionItem key={item.id} value={item.id}>
               <AccordionTrigger className="transition-opacity duration-200 hover:no-underline hover:opacity-60">
-                <div className="font-medium sm:py-1 lg:py-2 lg:text-lg text-start">
+                <div className="font-medium sm:py-1 lg:py-2 text-lg lg:text-lg text-start">
                   {item.question}
                 </div>
               </AccordionTrigger>
               <AccordionContent className="sm:mb-1 lg:mb-2">
-                <div className="text-muted-foreground lg:text-lg">
+                <div className="text-muted-foreground text-md lg:text-lg">
                   {item.answer}
                 </div>
               </AccordionContent>

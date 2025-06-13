@@ -7,12 +7,26 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Copy, CreditCard, Edit, Plus, Share2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 import { useBanks } from "../hooks/use-banks";
+import { ShareDialog } from "./share-dialog";
+import { useState } from "react";
+import type { BankAccount } from "@nhakonta/shared";
 
 export function BankAccountsCards() {
   const { data: dashboardData, isEmpty } = useBanks();
+  const [shareAccount, setShareAccount] = useState<BankAccount | null>(null);
+  // const [editingAccount, setEditingAccount] = useState<BankAccount | null>(
+  //   null
+  // );
+
+  const copyToClipboard = (text: string | number, label: string) => {
+    navigator.clipboard.writeText(text.toString());
+    toast.success(`${label} copiado para a área de transferência`);
+  };
+
   return (
-    <>
+    <div>
       {!isEmpty ? (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {dashboardData?.banks.map((bank) => (
@@ -43,7 +57,7 @@ export function BankAccountsCards() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      // onClick={() => copyToClipboard(account.accountNIB, "NIB")}
+                      onClick={() => copyToClipboard(bank.accountNIB, "NIB")}
                       className="p-1 h-7 w-7"
                     >
                       <Copy className="h-3 w-3" />
@@ -62,12 +76,9 @@ export function BankAccountsCards() {
                     <Button
                       size="sm"
                       variant="ghost"
-                      // onClick={() =>
-                      //   copyToClipboard(
-                      //     account.accountNumber,
-                      //     "Número da conta"
-                      //   )
-                      // }
+                      onClick={() =>
+                        copyToClipboard(bank.accountNumber, "Número da conta")
+                      }
                       className="p-1 h-7 w-7"
                     >
                       <Copy className="h-3 w-3" />
@@ -78,7 +89,7 @@ export function BankAccountsCards() {
                 <div className="flex space-x-2 pt-2">
                   <Button
                     size="sm"
-                    // onClick={() => setShareAccount(account)}
+                    onClick={() => setShareAccount(bank)}
                     className="flex-1"
                   >
                     <Share2 className="h-3 w-3 mr-1" />
@@ -125,6 +136,13 @@ export function BankAccountsCards() {
           </Card>
         </div>
       )}
-    </>
+
+      {shareAccount && (
+        <ShareDialog
+        bank={shareAccount}
+          onClose={() => setShareAccount(null)}
+        />
+      )}
+    </div>
   );
 }

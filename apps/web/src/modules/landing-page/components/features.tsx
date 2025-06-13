@@ -54,7 +54,7 @@ const reasons: Reason[] = [
 
 const Features = () => {
   return (
-    <section className="py-32">
+    <section className="mt-20 px-4">
       <div className="container">
         <div className="mb-10 md:mb-20">
           <h2 className="mb-2 text-center text-3xl font-semibold lg:text-5xl">
