@@ -6,6 +6,7 @@
   "scripts": {
     "api:dev": "pnpm run --filter api dev",
     "web:dev": "pnpm run --filter web dev",
+    "db:generate": "pnpm run --filter api db:generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
