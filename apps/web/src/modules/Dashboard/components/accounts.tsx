@@ -11,7 +11,7 @@ export function BankAccounts() {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900">
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-gray-300">
           Minhas Contas
         </h2>
         <Button onClick={() => setShowAddForm(true)}>

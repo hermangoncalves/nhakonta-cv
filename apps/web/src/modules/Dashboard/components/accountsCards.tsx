@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Copy, CreditCard, Edit, Plus, Share2, Trash2 } from "lucide-react";
 import { useBanks } from "../hooks/use-banks";
 
@@ -12,24 +18,26 @@ export function BankAccountsCards() {
           {dashboardData?.banks.map((bank) => (
             <Card
               key={bank.id}
-              className="border-none shadow-lg hover:shadow-xl transition-all duration-300 bg-white"
+              className="border-none shadow-lg hover:shadow-xl transition-all duration-300"
             >
               <CardHeader className="pb-4">
                 <CardTitle className="text-lg text-gray-900 flex items-center">
-                  <CreditCard className="h-5 w-5 mr-2 text-primary" />
-                  {bank.bankName.split("(")[0].trim()}
+                  <CreditCard className="h-5 w-5 mr-2 text-primary " />
+                  <span className="dark:text-gray-300">
+                    {bank.bankName.split("(")[0].trim()}
+                  </span>
                 </CardTitle>
-                <CardDescription className="text-gray-600">
+                <CardDescription className="text-gray-600 dark:text-gray-300">
                   {bank.accountHolderName}
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     NIB
                   </label>
                   <div className="flex items-center space-x-2 mt-1">
-                    <code className="flex-1 text-xs sm:text-sm bg-gray-50 px-2 py-1 rounded">
+                    <code className="flex-1 text-xs sm:text-sm  px-2 py-1 rounded bg-gray-100 dark:bg-background">
                       {bank.accountNIB}
                     </code>
                     <Button
@@ -44,11 +52,11 @@ export function BankAccountsCards() {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium text-gray-700">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
                     Número da Conta
                   </label>
                   <div className="flex items-center space-x-2 mt-1">
-                    <code className="flex-1 text-xs sm:text-sm bg-gray-50 px-2 py-1 rounded">
+                    <code className="flex-1 text-xs sm:text-sm px-2 py-1 rounded bg-gray-100 dark:bg-background">
                       {bank.accountNumber}
                     </code>
                     <Button
@@ -71,7 +79,7 @@ export function BankAccountsCards() {
                   <Button
                     size="sm"
                     // onClick={() => setShareAccount(account)}
-                    className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                    className="flex-1"
                   >
                     <Share2 className="h-3 w-3 mr-1" />
                     Compartilhar

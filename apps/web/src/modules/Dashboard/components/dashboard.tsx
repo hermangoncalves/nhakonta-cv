@@ -12,16 +12,16 @@ export function DashboardBody({ userFirsName }: DashboardBodyProps) {
   const { data: dashboardData, isError } = useBanks();
 
   if (isError) return <SomethingWrong />
-  
+
   return (
     <div className="container mx-auto px-4 py-8">
       {/* Welcome Section */}
       <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2 dark:text-gray-300">
           Bem-vindo ao seu nhaKonta,{" "}
           <span className="text-primary">{userFirsName}</span>
         </h1>
-        <p className="text-gray-600">
+        <p className="text-gray-600 dark:text-gray-300">
           Gerencie suas contas bancárias e compartilhe dados com segurança
         </p>
       </div>
