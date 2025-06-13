@@ -3,6 +3,10 @@
   "name": "nhakonta-api",
   "main": "src/index.ts",
   "compatibility_date": "2025-06-10",
+  "build": {
+    "command": "pnpm run build",
+    "cwd": ".."
+  },
   // "compatibility_flags": [
   //   "nodejs_compat"
   // ],
