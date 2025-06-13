@@ -4,35 +4,12 @@ import { routes } from "@/router";
 import { SignInButton, useAuth } from "@clerk/clerk-react";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-
-const lastUsers = {
-  count: 200,
-  avatars: [
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-1.webp",
-      alt: "Avatar 1",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-2.webp",
-      alt: "Avatar 2",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-3.webp",
-      alt: "Avatar 3",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-4.webp",
-      alt: "Avatar 4",
-    },
-    {
-      src: "https://deifkwefumgah.cloudfront.net/shadcnblocks/block/avatar-5.webp",
-      alt: "Avatar 5",
-    },
-  ],
-};
+import { useLatestUsersAvatars } from "../hooks/user-latest-users";
+import { AvatarFallback } from "@radix-ui/react-avatar";
 
 export function Hero() {
   const { isSignedIn } = useAuth();
+  const { data: latestUsers, isEmpty } = useLatestUsersAvatars();
 
   return (
     <section className="mt-14">
@@ -48,7 +25,7 @@ export function Hero() {
         </div>
         {isSignedIn ? (
           <Button size="lg" className="mt-10">
-            <Link to={routes.home}>Dashboard</Link>
+            <Link to={routes.dashboard}>Dashboard</Link>
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         ) : (
@@ -58,18 +35,23 @@ export function Hero() {
             </Button>
           </SignInButton>
         )}
-        <div className="mx-auto mt-10 flex w-fit flex-col items-center gap-4 sm:flex-row">
-          <span className="mx-4 inline-flex items-center -space-x-4">
-            {lastUsers.avatars.map((avatar, index) => (
-              <Avatar key={index} className="size-14 border">
-                <AvatarImage src={avatar.src} alt={avatar.alt} />
-              </Avatar>
-            ))}
-          </span>
-          <span className="text-sm text-muted-foreground">
-            {lastUsers.count} +Caboverdianos
-          </span>
-        </div>
+        {latestUsers && !isEmpty && (
+          <div className="mx-auto mt-10 flex w-fit flex-col items-center gap-4 sm:flex-row">
+            <span className="mx-4 inline-flex items-center -space-x-4">
+              {latestUsers?.users.map((user, index) => (
+                <Avatar key={index} className="size-14 border">
+                  {user.imageUrl && (
+                    <AvatarImage src={user.imageUrl} alt={user.firstName} />
+                  )}
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+              ))}
+            </span>
+            <span className="text-sm text-muted-foreground">
+              {latestUsers?.count} +Caboverdianos
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );

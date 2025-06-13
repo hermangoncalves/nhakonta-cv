@@ -18,7 +18,7 @@ export function CTA() {
       <div className="flex w-full flex-col justify-center gap-2 sm:flex-row">
         {isSignedIn ? (
           <Button size="lg" className="mt-10">
-            <Link to={routes.home}>Dashboard</Link>
+            <Link to={routes.dashboard}>Dashboard</Link>
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         ) : (

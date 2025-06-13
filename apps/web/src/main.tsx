@@ -5,6 +5,7 @@ import "./index.css";
 import App from "./App.tsx";
 import { env } from "./lib/env.ts";
 import { routes } from "./router.tsx";
+import APIInterceptorProvider from "./components/providers/api-interceptors.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -14,7 +15,9 @@ createRoot(document.getElementById("root")!).render(
       signUpFallbackRedirectUrl={routes.home}
       signInFallbackRedirectUrl={routes.home}
     >
-      <App />
+      <APIInterceptorProvider>
+        <App />
+      </APIInterceptorProvider>
     </ClerkProvider>
   </StrictMode>
 );
