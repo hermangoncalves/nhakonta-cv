@@ -135,7 +135,7 @@ export const ShareDialog = ({ bank, onClose }: ShareDialogProps) => {
                   </Button>
                   <Button
                     onClick={shareViaSMS}
-                    className="bg-accent flex items-center justify-center dark:text-white"
+                    className="bg-gray-600 flex items-center justify-center dark:text-white"
                   >
                     <Smartphone className="h-4 w-4 mr-2" />
                     SMS
