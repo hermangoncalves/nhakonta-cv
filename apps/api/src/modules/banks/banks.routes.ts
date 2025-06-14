@@ -7,7 +7,7 @@ import {
     createBankAccountSchema,
     listBankAccountsSchema,
     updateBankAccountSchema,
-} from '@nhakonta/shared';
+} from '@/schemas';
 
 export const createBank = createRoute({
     tags: ['banks'],

@@ -8,7 +8,7 @@ import {
     listUsersSchema,
     updateUserSchema,
     listUsersAvatarsSchema,
-} from '@nhakonta/shared';
+} from '@/schemas';
 
 export const createUser = createRoute({
     tags: ['users'],
