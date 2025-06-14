@@ -1,5 +1,4 @@
 import { AppBindings } from "@/types";
-import axios from "axios";
 import { Context } from "hono";
 
 export type DiscordNotificationStatus = "success" | "error" | "info" | "warning";
@@ -15,15 +14,13 @@ export async function sendDiscordNotification(
     payload: DiscordNotificationPayload
 ): Promise<void> {
     try {
-        await axios.post(
-            c.env.DISCORD_WEBHOOK,
-            payload,
-            {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            }
-        );
+        await fetch(c.env.DISCORD_WEBHOOK, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+        });
     } catch (error) {
         console.error("Erro ao enviar notificação para o Discord:", error);
         throw error;
@@ -37,4 +34,3 @@ export async function notifyDiscord(c: Context, payload: DiscordNotificationPayl
         })
     )
 }
-
