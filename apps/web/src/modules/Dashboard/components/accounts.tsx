@@ -22,7 +22,7 @@ export function BankAccounts() {
           Adicionar Conta
         </Button>
       </div>
-      <BankAccountsCards />
+      <BankAccountsCards setShowAddForm={setShowAddForm} />
 
       {showAddForm && (
         <BankAccountModalForm

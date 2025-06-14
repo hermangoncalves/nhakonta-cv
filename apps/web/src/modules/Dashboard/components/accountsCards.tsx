@@ -12,13 +12,31 @@ import { useBanks } from "../hooks/use-banks";
 import { ShareDialog } from "./share-dialog";
 import { useState } from "react";
 import type { BankAccount } from "@/schemas";
+import { useDeleteBank } from "../hooks/use-delete-bank";
 
-export function BankAccountsCards() {
+type BankAccountsCardsProps = {
+  setShowAddForm: (show: boolean) => void;
+};
+
+export function BankAccountsCards({ setShowAddForm }: BankAccountsCardsProps) {
   const { data: dashboardData, isEmpty } = useBanks();
   const [shareAccount, setShareAccount] = useState<BankAccount | null>(null);
   // const [editingAccount, setEditingAccount] = useState<BankAccount | null>(
   //   null
   // );
+
+  const { mutate: deleteBank } = useDeleteBank();
+
+  const handleDeleteAccount = (bankId: number) => {
+    deleteBank(bankId, {
+      onSuccess: () => {
+        toast.success("Conta bancária excluída com sucesso!");
+      },
+      onError: () => {
+        toast.error("Erro ao excluir conta bancária. Tente novamente.");
+      },
+    });
+  };
 
   const copyToClipboard = (text: string | number, label: string) => {
     navigator.clipboard.writeText(text.toString());
@@ -106,7 +124,7 @@ export function BankAccountsCards() {
                   <Button
                     size="sm"
                     variant="outline"
-                    // onClick={() => handleDeleteAccount(account.id)}
+                    onClick={() => handleDeleteAccount(bank.id)}
                     className="p-2 text-red-600 hover:text-red-700"
                   >
                     <Trash2 className="h-3 w-3" />
@@ -118,7 +136,7 @@ export function BankAccountsCards() {
         </div>
       ) : (
         <div>
-          <Card className="border-none shadow-lg bg-white/70 backdrop-blur-sm">
+          <Card className="border-none shadow-lg backdrop-blur-sm">
             <CardContent className="p-12 text-center">
               <CreditCard className="h-16 w-16 text-muted-foreground mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-muted-foreground  mb-2">
@@ -128,7 +146,12 @@ export function BankAccountsCards() {
                 Adicione sua primeira conta bancária para começar a usar o
                 nhakonta
               </p>
-              <Button variant="secondary">
+              <Button
+                variant="secondary"
+                onClick={() => {
+                  setShowAddForm(true);
+                }}
+              >
                 <Plus className="h-4 w-4 mr-2" />
                 Adicionar Primeira Conta
               </Button>
