@@ -36,8 +36,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { PropsWithChildren } from "react";
+import { useState, type PropsWithChildren } from "react";
 import { useUpdateBank } from "../hooks/use-update-banks";
+import { Loader2Icon } from "lucide-react";
 
 const banks = [
   {
@@ -64,8 +65,9 @@ export function BankModalForm({
   initialData,
   isEditing,
 }: BankModalFormProps) {
-  const { mutate: createBank } = useCreateBank();
-  const { mutate: updateBank } = useUpdateBank();
+  const [open, setOpen] = useState(false);
+  const { mutate: createBank, isPending: isCreating } = useCreateBank();
+  const { mutate: updateBank, isPending: isUpdating } = useUpdateBank();
   const { reward: confettiReward } = useReward("rewardId", "confetti");
 
   const form = useForm<CreateBankAccount>({
@@ -90,9 +92,10 @@ export function BankModalForm({
   const handleCreateBankAccount = (data: CreateBankAccount) => {
     createBank(data, {
       onSuccess: () => {
+          setOpen(false);
         toast.success("Conta bancária adicionada com sucesso!");
-        form.reset();
         confettiReward();
+        form.reset();
       },
       onError: (error) => {
         toast.error("Erro ao adicionar conta bancária. Tente novamente.");
@@ -115,6 +118,7 @@ export function BankModalForm({
       {
         onSuccess: () => {
           toast.success("Conta bancária atualizada com sucesso!");
+          setOpen(false);
           form.reset();
         },
         onError: (error) => {
@@ -126,7 +130,7 @@ export function BankModalForm({
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <form>
         <DialogTrigger asChild>{children}</DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
@@ -220,11 +224,16 @@ export function BankModalForm({
                 <DialogClose asChild>
                   <Button variant="outline">Cancelar</Button>
                 </DialogClose>
-                <DialogClose asChild>
+                {isCreating || isUpdating ? (
+                  <Button size="sm" disabled>
+                    <Loader2Icon className="animate-spin" />
+                    Carregando...
+                  </Button>
+                ) : (
                   <Button type="submit">
                     {isEditing ? "Salvar Alterações" : "Salvar"}
                   </Button>
-                </DialogClose>
+                )}
               </DialogFooter>
             </form>
           </Form>
