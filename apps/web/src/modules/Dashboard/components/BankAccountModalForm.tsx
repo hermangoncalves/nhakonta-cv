@@ -95,13 +95,13 @@ export const BankAccountModalForm = ({
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-lg border-none shadow-2xl bg-white">
+      <Card className="w-full max-w-lg border-none shadow-2xl">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <div>
-            <CardTitle className="text-xl text-gray-900">
+            <CardTitle className="text-xl dark:text-gray-300">
               {isEditing ? "Editar Conta Bancária" : "Adicionar Nova Conta"}
             </CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="text-gray-600 dark:text-gray-300">
               Preencha os dados da sua conta bancária
             </CardDescription>
           </div>
