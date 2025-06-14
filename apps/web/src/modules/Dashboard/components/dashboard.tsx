@@ -14,7 +14,7 @@ export function DashboardBody({ userFirsName }: DashboardBodyProps) {
   if (isError) return <SomethingWrong />
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 max-w-5xl">
       {/* Welcome Section */}
       <div className="mb-8">
         <h1 className="text-2xl sm:text-3xl font-semibold text-gray-900 mb-2 dark:text-gray-300">
