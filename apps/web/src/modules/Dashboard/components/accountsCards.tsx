@@ -6,13 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Copy, CreditCard, Edit, Plus, Share2, Trash2 } from "lucide-react";
+import { Copy, CreditCard, Edit, Plus, Share2 } from "lucide-react";
 import { toast } from "sonner";
 import { useBanks } from "../hooks/use-banks";
 import { ShareDialog } from "./share-dialog";
 import { useState } from "react";
 import type { BankAccount } from "@/schemas";
-import { useDeleteBank } from "../hooks/use-delete-bank";
+import { DeleteAccountAlert } from "./deleteAccountAlert";
 
 type BankAccountsCardsProps = {
   setShowAddForm: (show: boolean) => void;
@@ -24,19 +24,6 @@ export function BankAccountsCards({ setShowAddForm }: BankAccountsCardsProps) {
   // const [editingAccount, setEditingAccount] = useState<BankAccount | null>(
   //   null
   // );
-
-  const { mutate: deleteBank } = useDeleteBank();
-
-  const handleDeleteAccount = (bankId: number) => {
-    deleteBank(bankId, {
-      onSuccess: () => {
-        toast.success("Conta bancária excluída com sucesso!");
-      },
-      onError: () => {
-        toast.error("Erro ao excluir conta bancária. Tente novamente.");
-      },
-    });
-  };
 
   const copyToClipboard = (text: string | number, label: string) => {
     navigator.clipboard.writeText(text.toString());
@@ -121,14 +108,7 @@ export function BankAccountsCards({ setShowAddForm }: BankAccountsCardsProps) {
                   >
                     <Edit className="h-3 w-3" />
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleDeleteAccount(bank.id)}
-                    className="p-2 text-red-600 hover:text-red-700"
-                  >
-                    <Trash2 className="h-3 w-3" />
-                  </Button>
+                  <DeleteAccountAlert bankId={bank.id} />
                 </div>
               </CardContent>
             </Card>
