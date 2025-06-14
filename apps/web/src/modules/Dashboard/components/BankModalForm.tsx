@@ -91,6 +91,7 @@ export function BankModalForm({
     createBank(data, {
       onSuccess: () => {
         toast.success("Conta bancária adicionada com sucesso!");
+        form.reset();
         confettiReward();
       },
       onError: (error) => {
@@ -114,6 +115,7 @@ export function BankModalForm({
       {
         onSuccess: () => {
           toast.success("Conta bancária atualizada com sucesso!");
+          form.reset();
         },
         onError: (error) => {
           toast.error("Erro ao atualizar conta bancária. Tente novamente.");
