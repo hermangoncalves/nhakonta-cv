@@ -13,7 +13,8 @@
     "checkJs": false,
     "baseUrl": ".",
 		"paths": {
-			"@/*": ["src/*"]
+			"@/*": ["src/*"],
+      "@nhakonta/shared": ["../../packages/shared"]
 		},
   },
 }

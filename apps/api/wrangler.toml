@@ -3,8 +3,7 @@ main = "src/index.ts"
 compatibility_date = "2025-06-10"
 
 [build]
-command = "pnpm run build"
-cwd = ".."
+command = "pnpm install && pnpm run --filter api build"
 
 # Uncomment and configure the following sections if needed:
 
