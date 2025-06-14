@@ -7,6 +7,6 @@ const banksRoutes = createRouter()
     .openapi(routes.listBanks, handlers.listBanks)
     // .openapi(routes.getBank, handlers.getBank)
     // .openapi(routes.updateBank, handlers.updateBank)
-    // .openapi(routes.deleteBank, handlers.deleteBank);
+    .openapi(routes.deleteBank, handlers.deleteBank);
 
 export default banksRoutes;

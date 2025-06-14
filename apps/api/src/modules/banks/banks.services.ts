@@ -1,4 +1,4 @@
-import getDB from "@/db";
+import getDB, { DB } from "@/db";
 import { BankInsertModel, banks } from "@/db/schemas";
 import { AppBindings } from "@/types";
 import { Context } from "hono";
@@ -40,20 +40,32 @@ async function listBanks(c: Context<AppBindings>, userId: number, clerkId: strin
 //         .returning();
 // }
 
-// async function deleteBank(c: Context<AppBindings>, id: number, clerkId: string) {
-//     const db = getDB(c)
+async function deleteBank(db: DB, id: number, userId: number) {
+    return await db.delete(banks)
+        .where(and(
+            eq(banks.id, id),
+            eq(banks.userId, userId)
+        ))
+        .returning();
+}
 
-//     return await db.delete(banks)
-//         .where((banks, { and, eq }) => and(
-//             eq(banks.id, id),
-//             eq(banks.clerkId, clerkId)
-//         ))
-//         .returning();
-// }
+async function checkBankExists(db: DB, id: number, userId: number) {
+    return await db.query.banks.findFirst({
+        where: and(
+            eq(banks.id, id),
+            eq(banks.userId, userId)
+        ),
+        columns: {
+            id: true
+        }
+    })
+}
+
 
 export const bankServices = {
     createBank,
     listBanks,
     // updateBank,
-    // deleteBank,
+    deleteBank,
+    checkBankExists
 }

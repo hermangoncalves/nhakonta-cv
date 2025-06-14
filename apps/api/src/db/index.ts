@@ -7,3 +7,5 @@ export default function getDB(c: Context<AppBindings>) {
   const db = drizzle(c.env.DB, { schema });
   return db;
 }
+
+export type DB = ReturnType<typeof getDB>

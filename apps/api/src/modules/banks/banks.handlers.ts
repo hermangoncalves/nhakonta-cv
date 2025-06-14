@@ -1,5 +1,5 @@
 import { AppRouteHandler } from "@/types";
-import { CreateBankRoute, ListBanksRoute } from "./banks.routes";
+import { CreateBankRoute, DeleteBankRoute, ListBanksRoute } from "./banks.routes";
 import * as HttpStatusCode from '@/utils/http-status-codes';
 import getDB from "@/db";
 import { banks } from "@/db/schemas";
@@ -68,6 +68,33 @@ export const listBanks: AppRouteHandler<ListBanksRoute> = async (c) => {
         totalShared: totalCount,
     }, HttpStatusCode.OK);
 }
+
+export const deleteBank: AppRouteHandler<DeleteBankRoute> = async (c) => {
+    const db = getDB(c);
+    const { clerkId } = c.get('user')
+    const { id } = c.req.valid('param');
+
+    const user = await usersServices.getUserByClerkId(c, clerkId)
+
+    if (!user) {
+        return c.json({
+            error: 'User not found',
+        }, HttpStatusCode.UNAUTHORIZED);
+    }
+
+    const existingBank = await bankServices.checkBankExists(db, id, user.id)
+
+    if (!existingBank) {
+        return c.json({
+            error: 'Bank account not found',
+        }, HttpStatusCode.NOT_FOUND);
+    }
+
+    await bankServices.deleteBank(db, existingBank.id, user.id)
+
+    return c.body(null, HttpStatusCode.NO_CONTENT);
+}
+
 
 // export const getBank: AppRouteHandler<GetBankRoute> = async (c) => {
 //     const { clerkId } = c.get('user')

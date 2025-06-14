@@ -109,11 +109,13 @@ export const deleteBank = createRoute({
     ],
     request: {
         params: z.object({
-            id: z.string().describe('Bank account ID'),
+            id: z.coerce.number().describe('Bank account ID'),
         }),
     },
     responses: {
-        [HttpStatusCode.NO_CONTENT]: jsonSchema(z.null(), 'Bank account deleted'),
+        [HttpStatusCode.NO_CONTENT]: {
+            description: "Bank deleted",
+        },
         [HttpStatusCode.NOT_FOUND]: jsonSchema(z.object({
             error: z.string(),
         }), 'Bank account not found'),
