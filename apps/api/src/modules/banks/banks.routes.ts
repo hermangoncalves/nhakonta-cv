@@ -85,7 +85,7 @@ export const updateBank = createRoute({
     ],
     request: {
         params: z.object({
-            id: z.string().describe('Bank account ID'),
+            id: z.coerce.number().describe('Bank account ID'),
         }),
         body: jsonContentRequired(updateBankAccountSchema, 'Updated bank account details'),
     },

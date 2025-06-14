@@ -16,7 +16,7 @@ export const createBankAccountSchema = bankAccountSchema.omit({
     updatedAt: true
 });
 
-export const updateBankAccountSchema = bankAccountSchema.partial();
+export const updateBankAccountSchema = createBankAccountSchema.partial();
 
 
 export const listBankAccountsSchema = z.object({

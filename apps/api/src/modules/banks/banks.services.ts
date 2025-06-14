@@ -26,19 +26,15 @@ async function listBanks(c: Context<AppBindings>, userId: number, clerkId: strin
     });
 }
 
-// async function updateBank(c: Context<AppBindings>, id: number, clerkId: string, values: Partial<BankInsertModel>) {
-//     const db = getDB(c)
-
-//     return await db.update(banks)
-//         .set({
-//             ...values,
-//         })
-//         .where((banks, { and, eq }) => and(
-//             eq(banks.id, id),
-//             eq(banks.clerkId, clerkId)
-//         ))
-//         .returning();
-// }
+async function updateBank(db: DB, id: number, userId: number, values: Partial<BankInsertModel>) {
+    return await db.update(banks)
+        .set(values)
+        .where(and(
+            eq(banks.id, id),
+            eq(banks.userId, userId)
+        ))
+        .returning();
+}
 
 async function deleteBank(db: DB, id: number, userId: number) {
     return await db.delete(banks)
@@ -65,7 +61,7 @@ async function checkBankExists(db: DB, id: number, userId: number) {
 export const bankServices = {
     createBank,
     listBanks,
-    // updateBank,
+    updateBank,
     deleteBank,
     checkBankExists
 }
