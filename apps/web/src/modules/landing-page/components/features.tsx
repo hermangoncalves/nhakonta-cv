@@ -55,7 +55,7 @@ const reasons: Reason[] = [
 const Features = () => {
   return (
     <section className="mt-20 px-4">
-      <div className="container">
+      <div className="container max-w-5xl mx-auto">
         <div className="mb-10 md:mb-20">
           <h2 className="mb-2 text-center text-3xl font-semibold lg:text-5xl">
             Porque utilizar o nhaKonta?
