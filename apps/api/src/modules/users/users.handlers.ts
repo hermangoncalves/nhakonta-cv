@@ -5,7 +5,7 @@ import getDB from "@/db";
 import { users } from "@/db/schemas";
 import { createClerkClient } from "@clerk/clerk-sdk-node";
 import { count, desc } from "drizzle-orm";
-import { notifyDiscord } from "@/utils/notifications";
+import { notifyDiscord, sendDiscordNotification } from "@/utils/notifications";
 
 export const createUser: AppRouteHandler<CreateUserRoute> = async (c) => {
     const { clerkId } = c.get('user')
@@ -65,7 +65,7 @@ export const listLatestUsersAvatars: AppRouteHandler<LastesUsersAvatarRoute> = a
 
     const [{ count: usersCount }] = await db.select({ count: count() }).from(users)
 
-    notifyDiscord(c, {
+    await sendDiscordNotification(c, {
         title: "Listagem de Usuários",
         description: `Listagem de avatares de usuários realizada com sucesso. Total de usuários: ${usersCount}`,
         status: "success",
