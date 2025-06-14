@@ -12,8 +12,8 @@ createRoot(document.getElementById("root")!).render(
     <ClerkProvider
       publishableKey={env.CLERK_PUBLISHABLE_KEY}
       afterSignOutUrl={routes.home}
-      signUpFallbackRedirectUrl={routes.home}
-      signInFallbackRedirectUrl={routes.home}
+      signUpFallbackRedirectUrl={routes.dashboard}
+      signInFallbackRedirectUrl={routes.dashboard}
     >
       <APIInterceptorProvider>
         <App />
