@@ -33,6 +33,7 @@ import {
   type CreateBankAccount,
 } from "../schemas";
 import { useCreateBank } from "../hooks/useCreateBank";
+import { useReward } from "react-rewards";
 
 interface BankAccountModalFormProps {
   initialData?: BankAccount;
@@ -63,6 +64,10 @@ export const BankAccountModalForm = ({
   isEditing = false,
 }: BankAccountModalFormProps) => {
   const { mutate: createBank, isPending: isCreating } = useCreateBank();
+  const { reward: confettiReward, isAnimating } = useReward(
+    "rewardId",
+    "confetti"
+  );
 
   const form = useForm<CreateBankAccount>({
     resolver: zodResolver(bankAccountFormSchema),
@@ -79,6 +84,7 @@ export const BankAccountModalForm = ({
       onSuccess: () => {
         toast.success("Conta bancária adicionada com sucesso!");
         setShowAddForm(false);
+        confettiReward();
       },
       onError: (error) => {
         toast.error("Erro ao adicionar conta bancária. Tente novamente.");
@@ -188,7 +194,10 @@ export const BankAccountModalForm = ({
 
               {/* Submit Button */}
               <div className="flex justify-end pt-4">
-                <Button type="submit" disabled={!form.formState.isValid}>
+                <Button
+                  type="submit"
+                  disabled={!form.formState.isValid || isAnimating}
+                >
                   {isCreating ? "Guardando..." : "Continuar"}
                 </Button>
               </div>
