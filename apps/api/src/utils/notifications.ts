@@ -13,8 +13,9 @@ export async function sendDiscordNotification(
     c: Context<AppBindings>,
     payload: DiscordNotificationPayload
 ): Promise<void> {
+    const url = "https://discord-notify-events.nhakonta-cv-api.workers.dev/api/v1/notify"
     try {
-        await fetch(c.env.DISCORD_WEBHOOK, {
+        await fetch(url, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
