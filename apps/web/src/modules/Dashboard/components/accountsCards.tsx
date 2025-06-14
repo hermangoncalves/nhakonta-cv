@@ -13,12 +13,11 @@ import { ShareDialog } from "./share-dialog";
 import { useState } from "react";
 import type { BankAccount } from "@/schemas";
 import { DeleteAccountAlert } from "./deleteAccountAlert";
+import { BankModalForm } from "./BankModalForm";
 
-type BankAccountsCardsProps = {
-  setShowAddForm: (show: boolean) => void;
-};
+type BankAccountsCardsProps = {};
 
-export function BankAccountsCards({ setShowAddForm }: BankAccountsCardsProps) {
+export function BankAccountsCards({}: BankAccountsCardsProps) {
   const { data: dashboardData, isEmpty } = useBanks();
   const [shareAccount, setShareAccount] = useState<BankAccount | null>(null);
   // const [editingAccount, setEditingAccount] = useState<BankAccount | null>(
@@ -43,7 +42,7 @@ export function BankAccountsCards({ setShowAddForm }: BankAccountsCardsProps) {
                 <CardTitle className="text-lg text-gray-900 flex items-center">
                   <CreditCard className="h-5 w-5 mr-2 text-primary " />
                   <span className="dark:text-gray-300">
-                    {bank.bankName.split("(")[0].trim()}
+                    {bank.bankName}
                   </span>
                 </CardTitle>
                 <CardDescription className="text-gray-600 dark:text-gray-300">
@@ -100,14 +99,16 @@ export function BankAccountsCards({ setShowAddForm }: BankAccountsCardsProps) {
                     <Share2 className="h-3 w-3 mr-1" />
                     Compartilhar
                   </Button>
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    // onClick={() => setEditingAccount(account)}
-                    className="p-2"
-                  >
-                    <Edit className="h-3 w-3" />
-                  </Button>
+                  <BankModalForm initialData={bank} isEditing>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      // onClick={() => setEditingAccount(account)}
+                      className="p-2"
+                    >
+                      <Edit className="h-3 w-3" />
+                    </Button>
+                  </BankModalForm>
                   <DeleteAccountAlert bankId={bank.id} />
                 </div>
               </CardContent>
@@ -126,15 +127,12 @@ export function BankAccountsCards({ setShowAddForm }: BankAccountsCardsProps) {
                 Adicione sua primeira conta bancária para começar a usar o
                 nhakonta
               </p>
-              <Button
-                variant="secondary"
-                onClick={() => {
-                  setShowAddForm(true);
-                }}
-              >
-                <Plus className="h-4 w-4 mr-2" />
-                Adicionar Primeira Conta
-              </Button>
+              <BankModalForm>
+                <Button variant="secondary">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Adicionar Primeira Conta
+                </Button>
+              </BankModalForm>
             </CardContent>
           </Card>
         </div>

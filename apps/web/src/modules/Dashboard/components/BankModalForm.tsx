@@ -1,24 +1,26 @@
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { X } from "lucide-react";
+  createBankAccountSchema,
+  type BankAccount,
+  type CreateBankAccount,
+  type UpdateBankAccount,
+} from "@/schemas";
+import { useCreateBank } from "../hooks/useCreateBank";
+import { useReward } from "react-rewards";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-
 import {
   Form,
   FormControl,
@@ -28,19 +30,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
-  bankAccountFormSchema,
-  type BankAccount,
-  type CreateBankAccount,
-} from "../schemas";
-import { useCreateBank } from "../hooks/useCreateBank";
-import { useReward } from "react-rewards";
-
-interface BankAccountModalFormProps {
-  initialData?: BankAccount;
-  setShowAddForm: (show: boolean) => void;
-  onCancel: () => void;
-  isEditing?: boolean;
-}
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { PropsWithChildren } from "react";
+import { useUpdateBank } from "../hooks/use-update-banks";
 
 const banks = [
   {
@@ -57,20 +54,22 @@ const banks = [
   },
 ];
 
-export const BankAccountModalForm = ({
+type BankModalFormProps = {
+  initialData?: BankAccount;
+  isEditing?: boolean;
+} & PropsWithChildren;
+
+export function BankModalForm({
+  children,
   initialData,
-  onCancel,
-  setShowAddForm,
-  isEditing = false,
-}: BankAccountModalFormProps) => {
-  const { mutate: createBank, isPending: isCreating } = useCreateBank();
-  const { reward: confettiReward, isAnimating } = useReward(
-    "rewardId",
-    "confetti"
-  );
+  isEditing,
+}: BankModalFormProps) {
+  const { mutate: createBank } = useCreateBank();
+  const { mutate: updateBank } = useUpdateBank();
+  const { reward: confettiReward } = useReward("rewardId", "confetti");
 
   const form = useForm<CreateBankAccount>({
-    resolver: zodResolver(bankAccountFormSchema),
+    resolver: zodResolver(createBankAccountSchema),
     defaultValues: {
       bankName: initialData?.bankName ?? "",
       accountHolderName: initialData?.accountHolderName ?? "",
@@ -79,11 +78,19 @@ export const BankAccountModalForm = ({
     },
   });
 
+  const onSumbit = (data: CreateBankAccount | UpdateBankAccount) => {
+    if (isEditing && initialData?.id) {
+      handleUpdateBankAccount(data);
+      return;
+    }
+
+    handleCreateBankAccount(data as CreateBankAccount);
+  };
+
   const handleCreateBankAccount = (data: CreateBankAccount) => {
     createBank(data, {
       onSuccess: () => {
         toast.success("Conta bancária adicionada com sucesso!");
-        setShowAddForm(false);
         confettiReward();
       },
       onError: (error) => {
@@ -93,29 +100,44 @@ export const BankAccountModalForm = ({
     });
   };
 
-  return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-lg border-none shadow-2xl">
-        <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-          <div>
-            <CardTitle className="text-xl dark:text-gray-300">
-              {isEditing ? "Editar Conta Bancária" : "Adicionar Nova Conta"}
-            </CardTitle>
-            <CardDescription className="text-gray-600 dark:text-gray-300">
-              Preencha os dados da sua conta bancária
-            </CardDescription>
-          </div>
-          <Button variant="ghost" size="sm" onClick={onCancel} className="p-2">
-            <X className="h-4 w-4" />
-          </Button>
-        </CardHeader>
+  const handleUpdateBankAccount = (data: UpdateBankAccount) => {
+    if (!initialData?.id) {
+      toast.error("ID da conta bancária não encontrado.");
+      return;
+    }
 
-        <CardContent>
+    updateBank(
+      {
+        bankId: initialData.id,
+        data,
+      },
+      {
+        onSuccess: () => {
+          toast.success("Conta bancária atualizada com sucesso!");
+        },
+        onError: (error) => {
+          toast.error("Erro ao atualizar conta bancária. Tente novamente.");
+          console.error("Erro ao atualizar conta bancária:", error);
+        },
+      }
+    );
+  };
+
+  return (
+    <Dialog>
+      <form>
+        <DialogTrigger asChild>{children}</DialogTrigger>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>
+              {isEditing ? "Editar Conta Bancária" : "Adicionar Nova Conta"}
+            </DialogTitle>
+            <DialogDescription>
+              Preencha os dados da sua conta bancária
+            </DialogDescription>
+          </DialogHeader>
           <Form {...form}>
-            <form
-              onSubmit={form.handleSubmit(handleCreateBankAccount)}
-              className="space-y-4"
-            >
+            <form onSubmit={form.handleSubmit(onSumbit)} className="space-y-4">
               {/* Nome do Banco */}
               <FormField
                 control={form.control}
@@ -192,19 +214,20 @@ export const BankAccountModalForm = ({
                 )}
               />
 
-              {/* Submit Button */}
-              <div className="flex justify-end pt-4">
-                <Button
-                  type="submit"
-                  disabled={!form.formState.isValid || isAnimating}
-                >
-                  {isCreating ? "Guardando..." : "Continuar"}
-                </Button>
-              </div>
+              <DialogFooter className="mt-6">
+                <DialogClose asChild>
+                  <Button variant="outline">Cancelar</Button>
+                </DialogClose>
+                <DialogClose asChild>
+                  <Button type="submit">
+                    {isEditing ? "Salvar Alterações" : "Salvar"}
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
             </form>
           </Form>
-        </CardContent>
-      </Card>
-    </div>
+        </DialogContent>
+      </form>
+    </Dialog>
   );
-};
+}
