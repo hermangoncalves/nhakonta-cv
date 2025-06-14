@@ -6,6 +6,7 @@ import { banks } from "@/db/schemas";
 import { count, eq } from "drizzle-orm";
 import { usersServices } from "../users/users.services";
 import { bankServices } from "./banks.services";
+import { sendDiscordNotification } from "@/utils/notifications";
 
 export const createBank: AppRouteHandler<CreateBankRoute> = async (c) => {
     const { clerkId } = c.get('user')
@@ -16,6 +17,11 @@ export const createBank: AppRouteHandler<CreateBankRoute> = async (c) => {
     const user = await usersServices.getUserByClerkId(c, clerkId)
 
     if (!user) {
+        await sendDiscordNotification(c, {
+            title: "Erro ao Adiconar Conta bancária",
+            description: `Usuário com clerkId '${clerkId}' não encontrado.`,
+            status: "error",
+        });
         return c.json({
             error: 'User not found',
         }, HttpStatusCode.UNAUTHORIZED);
@@ -29,10 +35,21 @@ export const createBank: AppRouteHandler<CreateBankRoute> = async (c) => {
 
     if (!newBank) {
         console.log('Failed to create bank account');
+        await sendDiscordNotification(c, {
+            title: "Erro ao Criar Conta",
+            description: `Erro interno ao criar conta bancária para o usuário '${user.id}'.`,
+            status: "error",
+        });
         return c.json({
             error: 'Failed to create bank account',
         }, HttpStatusCode.INTERNAL_SERVER_ERROR);
     }
+
+    await sendDiscordNotification(c, {
+        title: "Nova Conta",
+        description: "Uma nova conta bancária foi criada com sucesso.",
+        status: "success",
+    });
 
     return c.json({
         id: newBank.id,
@@ -51,6 +68,11 @@ export const listBanks: AppRouteHandler<ListBanksRoute> = async (c) => {
     const user = await usersServices.getUserByClerkId(c, clerkId)
 
     if (!user) {
+        await sendDiscordNotification(c, {
+            title: "Erro ao Listar Contas",
+            description: `Usuário com clerkId '${clerkId}' não encontrado.`,
+            status: "error",
+        });
         return c.json({
             error: 'User not found',
         }, HttpStatusCode.UNAUTHORIZED);
@@ -77,6 +99,11 @@ export const deleteBank: AppRouteHandler<DeleteBankRoute> = async (c) => {
     const user = await usersServices.getUserByClerkId(c, clerkId)
 
     if (!user) {
+        await sendDiscordNotification(c,{
+            title: "Erro ao Deletar Conta",
+            description: `Usuário com clerkId '${clerkId}' não encontrado.`,
+            status: "error",
+        });
         return c.json({
             error: 'User not found',
         }, HttpStatusCode.UNAUTHORIZED);
@@ -85,6 +112,11 @@ export const deleteBank: AppRouteHandler<DeleteBankRoute> = async (c) => {
     const existingBank = await bankServices.checkBankExists(db, id, user.id)
 
     if (!existingBank) {
+        await sendDiscordNotification(c,{
+            title: "Erro ao Deletar Conta",
+            description: `Conta bancária com ID '${id}' não encontrada para o usuário '${user.id}'.`,
+            status: "error",
+        });
         return c.json({
             error: 'Bank account not found',
         }, HttpStatusCode.NOT_FOUND);
@@ -92,30 +124,14 @@ export const deleteBank: AppRouteHandler<DeleteBankRoute> = async (c) => {
 
     await bankServices.deleteBank(db, existingBank.id, user.id)
 
+    await sendDiscordNotification(c,{
+        title: "Conta Deletada",
+        description: `Conta bancária com ID '${id}' foi deletada com sucesso.`,
+        status: "success",
+    });
+
     return c.body(null, HttpStatusCode.NO_CONTENT);
 }
-
-
-// export const getBank: AppRouteHandler<GetBankRoute> = async (c) => {
-//     const { clerkId } = c.get('user')
-//     const { id } = c.req.valid('params');
-
-//     const db = getDB(c);
-//     const bank = await db.query.banks.findFirst({
-//         where: (banks, { and, eq }) => and(
-//             eq(banks.id, parseInt(id)),
-//             eq(banks.clerkId, clerkId)
-//         )
-//     });
-
-//     if (!bank) {
-//         return c.json({
-//             error: 'Bank account not found',
-//         }, HttpStatusCode.NOT_FOUND);
-//     }
-
-//     return c.json(bank);
-// }
 
 export const updateBank: AppRouteHandler<UpdateBankRoute> = async (c) => {
     const db = getDB(c);
@@ -126,6 +142,11 @@ export const updateBank: AppRouteHandler<UpdateBankRoute> = async (c) => {
     const user = await usersServices.getUserByClerkId(c, clerkId)
 
     if (!user) {
+        await sendDiscordNotification(c,{
+            title: "Erro ao Atualizar Conta",
+            description: `Usuário com clerkId '${clerkId}' não encontrado.`,
+            status: "error",
+        });
         return c.json({
             error: 'User not found',
         }, HttpStatusCode.UNAUTHORIZED);
@@ -134,10 +155,21 @@ export const updateBank: AppRouteHandler<UpdateBankRoute> = async (c) => {
     const [updatedBank] = await bankServices.updateBank(db, id, user.id, body)
 
     if (!updatedBank) {
+        await sendDiscordNotification(c,{
+            title: "Erro ao Atualizar Conta",
+            description: `Conta bancária com ID '${id}' não encontrada para o usuário '${user.id}'.`,
+            status: "error",
+        });
         return c.json({
             error: 'Bank account not found',
         }, HttpStatusCode.NOT_FOUND);
     }
+
+    await sendDiscordNotification(c,{
+        title: "Conta Atualizada",
+        description: `Conta bancária com ID '${id}' foi atualizada com sucesso.`,
+        status: "success",
+    });
 
     return c.json(updatedBank, HttpStatusCode.OK);
 }
