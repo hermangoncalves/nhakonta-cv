@@ -29,3 +29,12 @@ export async function sendDiscordNotification(
         throw error;
     }
 }
+
+export async function notifyDiscord(c: Context, payload: DiscordNotificationPayload) {
+    c.executionCtx.waitUntil(
+        sendDiscordNotification(c, payload).catch((err) => {
+            console.error('Erro enviando notificação Discord:', err)
+        })
+    )
+}
+
