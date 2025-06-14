@@ -1,12 +1,8 @@
-import getDB from "@/db";
+import { DB } from "@/db";
 import { users } from "@/db/schemas";
-import { AppBindings } from "@/types";
 import { eq } from "drizzle-orm";
-import { Context } from "hono";
 
-async function getUserByClerkId(c: Context<AppBindings>, clerkId: string) {
-    const db = getDB(c)
-
+async function getUserByClerkId(db: DB, clerkId: string) {
     return await db.query.users.findFirst({
         where: eq(users.clerkId, clerkId),
         columns: {

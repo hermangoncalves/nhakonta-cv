@@ -5,7 +5,7 @@ import getDB from "@/db";
 import { users } from "@/db/schemas";
 import { createClerkClient } from "@clerk/clerk-sdk-node";
 import { count, desc } from "drizzle-orm";
-import { sendDiscordNotification } from "@/utils/notifications";
+import { notifyDiscord } from "@/utils/notifications";
 
 export const createUser: AppRouteHandler<CreateUserRoute> = async (c) => {
     const { clerkId } = c.get('user')
@@ -19,7 +19,7 @@ export const createUser: AppRouteHandler<CreateUserRoute> = async (c) => {
 
     if (!newUser) {
         console.log('Failed to create user');
-        await sendDiscordNotification(c,{
+        notifyDiscord(c, {
             title: "Erro ao Criar Usuário",
             description: `Erro interno ao criar usuário com clerkId '${clerkId}'.`,
             status: "error",
@@ -39,7 +39,7 @@ export const createUser: AppRouteHandler<CreateUserRoute> = async (c) => {
         }
     })
 
-    await sendDiscordNotification(c,{
+    notifyDiscord(c, {
         title: "Novo Usuário",
         description: `Usuário com ID '${newUser.id}' foi criado com sucesso.`,
         status: "success",
@@ -65,7 +65,7 @@ export const listLatestUsersAvatars: AppRouteHandler<LastesUsersAvatarRoute> = a
 
     const [{ count: usersCount }] = await db.select({ count: count() }).from(users)
 
-    await sendDiscordNotification(c,{
+    notifyDiscord(c, {
         title: "Listagem de Usuários",
         description: `Listagem de avatares de usuários realizada com sucesso. Total de usuários: ${usersCount}`,
         status: "success",
