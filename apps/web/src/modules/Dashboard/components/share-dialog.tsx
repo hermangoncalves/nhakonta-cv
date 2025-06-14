@@ -37,7 +37,7 @@ export const ShareDialog = ({ bank, onClose }: ShareDialogProps) => {
 📄 Nº da Conta: ${bank.accountNumber}
 
 📲 Compartilhado via nhaKonta
-🌐 https://nhaKonta.cv
+🌐 https://nhaKonta.pages.dev
 `;
 
   const copyToClipboard = (text: string) => {
@@ -68,14 +68,14 @@ export const ShareDialog = ({ bank, onClose }: ShareDialogProps) => {
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-      <Card className="w-full max-w-lg border-none shadow-2xl bg-white">
+      <Card className="w-full max-w-lg border-none shadow-2xl">
         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
           <div>
-            <CardTitle className="text-xl text-gray-900 flex items-center">
+            <CardTitle className="text-xl flex items-center text-primary">
               <Share2 className="h-5 w-5 mr-2 text-primary" />
               Compartilhar Conta
             </CardTitle>
-            <CardDescription className="text-gray-600">
+            <CardDescription className="text-gray-600 dark:text-gray-300">
               {bank.bankName.split("(")[0].trim()} - {bank.accountHolderName}
             </CardDescription>
           </div>
@@ -128,14 +128,14 @@ export const ShareDialog = ({ bank, onClose }: ShareDialogProps) => {
                 <div className="grid grid-cols-2 gap-3">
                   <Button
                     onClick={shareViaWhatsApp}
-                    className=" flex items-center justify-center"
+                    className="flex items-center justify-center"
                   >
                     <MessageCircle className="h-4 w-4 mr-2" />
                     WhatsApp
                   </Button>
                   <Button
                     onClick={shareViaSMS}
-                    className="bg-accent flex items-center justify-center"
+                    className="bg-accent flex items-center justify-center dark:text-white"
                   >
                     <Smartphone className="h-4 w-4 mr-2" />
                     SMS
