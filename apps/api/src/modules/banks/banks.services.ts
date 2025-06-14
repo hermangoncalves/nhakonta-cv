@@ -2,7 +2,7 @@ import getDB from "@/db";
 import { BankInsertModel, banks } from "@/db/schemas";
 import { AppBindings } from "@/types";
 import { Context } from "hono";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 async function createBank(c: Context<AppBindings>, values: BankInsertModel) {
     const db = getDB(c)
@@ -21,7 +21,8 @@ async function listBanks(c: Context<AppBindings>, userId: number, clerkId: strin
             eq(banks.clerkId, clerkId)
         ),
         limit,
-        offset
+        offset,
+        orderBy: desc(banks.createdAt)
     });
 }
 
