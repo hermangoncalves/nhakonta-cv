@@ -1,6 +1,6 @@
 
 import { API } from "@/lib/api";
-import type { ListBankAccounts } from "@nhakonta/shared";
+import type { ListBankAccounts } from "@/schemas";
 import { useQuery } from "@tanstack/react-query";
 
 

@@ -1,6 +1,6 @@
 import { API } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
-import type { ListUsersAvatars } from "@nhakonta/shared";
+import type { ListUsersAvatars } from "@/schemas";
 
 
 async function getLatestUsersAvatars() {

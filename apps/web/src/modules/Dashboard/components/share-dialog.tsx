@@ -19,7 +19,7 @@ import {
   Mail,
   Smartphone,
 } from "lucide-react";
-import type { BankAccount } from "@nhakonta/shared";
+import type { BankAccount } from "@/schemas";
 
 interface ShareDialogProps {
   bank: BankAccount;

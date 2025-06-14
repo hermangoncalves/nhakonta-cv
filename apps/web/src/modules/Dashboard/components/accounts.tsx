@@ -3,7 +3,7 @@ import { Plus } from "lucide-react";
 import { BankAccountsCards } from "./accountsCards";
 import { useState } from "react";
 import { BankAccountModalForm } from "./BankAccountModalForm";
-import {} from "@nhakonta/shared";
+import {} from "@/schemas";
 
 export function BankAccounts() {
   const [showAddForm, setShowAddForm] = useState(false);

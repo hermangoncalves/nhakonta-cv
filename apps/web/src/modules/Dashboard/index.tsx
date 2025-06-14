@@ -2,7 +2,7 @@ import { BaseLayout } from "@/components/base-layout";
 import { useUser } from "@clerk/clerk-react";
 import { useCallback, useEffect } from "react";
 import { usecreateUser } from "./hooks/useCreateUser";
-import type { CreateUser } from "@nhakonta/shared";
+import type { CreateUser } from "@/schemas";
 import { SomethingWrong } from "@/components/somethin-wrong";
 import { DashboardBody } from "./components/dashboard";
 

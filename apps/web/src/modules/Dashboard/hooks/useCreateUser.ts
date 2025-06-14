@@ -1,5 +1,5 @@
 import { API } from "@/lib/api";
-import type { CreateUser } from "@nhakonta/shared";
+import type { CreateUser } from "@/schemas";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 

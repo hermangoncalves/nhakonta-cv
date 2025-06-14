@@ -11,7 +11,7 @@ import { toast } from "sonner";
 import { useBanks } from "../hooks/use-banks";
 import { ShareDialog } from "./share-dialog";
 import { useState } from "react";
-import type { BankAccount } from "@nhakonta/shared";
+import type { BankAccount } from "@/schemas";
 
 export function BankAccountsCards() {
   const { data: dashboardData, isEmpty } = useBanks();
@@ -139,7 +139,7 @@ export function BankAccountsCards() {
 
       {shareAccount && (
         <ShareDialog
-        bank={shareAccount}
+          bank={shareAccount}
           onClose={() => setShareAccount(null)}
         />
       )}

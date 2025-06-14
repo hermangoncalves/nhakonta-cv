@@ -1,5 +1,5 @@
 import { API } from "@/lib/api";
-import type { CreateBankAccount } from "@nhakonta/shared";
+import type { CreateBankAccount } from "@/schemas";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 async function createBank(data: CreateBankAccount) {
