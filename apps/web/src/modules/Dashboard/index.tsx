@@ -36,7 +36,7 @@ export default function Dashboard() {
     if (userCreated) return;
 
     handleUserCreation();
-  }, []);
+  }, [user, createUser]);
 
   if (isPending) return <div>Carregando...</div>;
   if (isError) return <SomethingWrong />;
